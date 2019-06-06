@@ -14,29 +14,31 @@ public class BObserver<T> implements Observer<Response<T>> {
     private ObserverListener<T> listener;
     private Activity mActivity;
     private Object mTarget;
+    private boolean visible;
 
-    public BObserver(Activity mActivity){
+    public BObserver(Activity mActivity) {
         this(mActivity, mActivity);
     }
 
-    public BObserver(Activity mActivity, Object mTarget){
+    public BObserver(Activity mActivity, Object mTarget) {
         this.mActivity = mActivity;
         this.mTarget = mTarget;
+        this.visible=true;
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-        if(mTarget instanceof OnLoadingListener){
+        if (mTarget instanceof OnLoadingListener && visible) {
             ((OnLoadingListener) mTarget).show();
         }
-        if(listener!=null) {
+        if (listener != null) {
             listener.beforeRequest(d);
         }
     }
 
     @Override
     public void onNext(Response<T> tResponse) {
-        if(listener!=null) {
+        if (listener != null) {
             if (tResponse.reCode == 200) {
                 listener.onSuccess(tResponse.params);
             } else {
@@ -48,20 +50,20 @@ public class BObserver<T> implements Observer<Response<T>> {
 
     @Override
     public void onError(Throwable e) {
-        if(mTarget instanceof OnLoadingListener){
+        if (mTarget instanceof OnLoadingListener&& visible) {
             ((OnLoadingListener) mTarget).dismiss();
         }
-        if(listener!=null){
+        if (listener != null) {
             listener.onError(e);
         }
     }
 
     @Override
     public void onComplete() {
-        if(mTarget instanceof OnLoadingListener){
+        if (mTarget instanceof OnLoadingListener&& visible) {
             ((OnLoadingListener) mTarget).dismiss();
         }
-        if(listener!=null){
+        if (listener != null) {
             listener.finishRequest();
         }
     }
@@ -80,5 +82,9 @@ public class BObserver<T> implements Observer<Response<T>> {
 
     public Object getmTarget() {
         return mTarget;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

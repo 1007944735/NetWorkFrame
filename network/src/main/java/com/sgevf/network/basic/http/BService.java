@@ -23,6 +23,7 @@ public abstract class BService<T,S> implements ObserverListener<S>,ObservableLis
     private Activity mActivity;
     private Object mTarget;
     private RequestBody params;
+    private boolean visible;
 
     public BService(Activity mActivity, Object mTarget){
         this(mActivity,mTarget,null);
@@ -31,6 +32,7 @@ public abstract class BService<T,S> implements ObserverListener<S>,ObservableLis
     public BService(Activity mActivity, Object mTarget, UploadProgressListener listener){
         this.mActivity=mActivity;
         this.mTarget=mTarget;
+        this.visible=true;
         params=new RequestBody();
         params.setUploadListener(listener);
         Retrofit retrofit=new Retrofit.Builder()
@@ -66,6 +68,7 @@ public abstract class BService<T,S> implements ObserverListener<S>,ObservableLis
 
     private Observer setObserver(){
         BObserver<S> observer=new BObserver<>(mActivity,mTarget);
+        observer.setVisible(visible);
         observer.setListener(this);
         return observer;
     }
@@ -85,4 +88,9 @@ public abstract class BService<T,S> implements ObserverListener<S>,ObservableLis
     public RequestBody getParams() {
         return params;
     }
+
+    public void setLoadingVisibility(boolean visible){
+        this.visible=visible;
+    }
+
 }

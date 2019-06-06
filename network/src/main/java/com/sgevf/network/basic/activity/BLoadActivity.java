@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.sgevf.network.dialog.DialogManager;
 import com.sgevf.network.listener.OnLoadingListener;
@@ -19,6 +20,10 @@ public abstract class BLoadActivity<T> extends AppCompatActivity implements OnLo
 
     public Dialog initDialog(Context context){
         return DialogManager.initDefaultLoading(context);
+    }
+
+    public View initLoading(){
+        return null;
     }
 
     @Override
