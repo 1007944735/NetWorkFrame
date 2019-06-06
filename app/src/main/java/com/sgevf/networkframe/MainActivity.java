@@ -1,13 +1,25 @@
 package com.sgevf.networkframe;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.sgevf.network.Config;
+import com.sgevf.network.basic.activity.BLoadActivity;
+
+public class MainActivity extends BLoadActivity<String> {
+    public TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        text=findViewById(R.id.text);
+        Config.url="http://192.168.22.217:8080/";
+        new TestTask(this,this).request();
+    }
+
+    @Override
+    public void onLoadFinish(String s) {
+        text.setText(s);
     }
 }
